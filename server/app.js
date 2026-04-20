@@ -55,9 +55,9 @@ app.get('/api/health', (req, res) => {
 // Sprint 2 — Products (public)
 app.use('/api/products', require('./routes/products'));
 
-// Sprint 3 — Cart + Orders
-// app.use('/api/cart',   require('./routes/cart'));
-// app.use('/api/orders', require('./routes/orders'));
+// Sprint 3 — Orders + Settings
+app.use('/api/orders',   require('./routes/orders'));
+app.use('/api/settings', require('./routes/settings'));
 
 // Sprint 4 — Admin
 // app.use('/api/admin',  require('./routes/admin/auth'));

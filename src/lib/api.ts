@@ -39,6 +39,20 @@ export async function getProduct(slug: string): Promise<{ product: Product }> {
   return apiFetch(`/api/products/${slug}`);
 }
 
+// ── Settings ─────────────────────────────────────────
+
+export interface PaymentSettings {
+  bank_name: string;
+  account_no: string;
+  account_name: string;
+  shipping_fee: number;
+  free_shipping_min: number;
+}
+
+export async function getPaymentSettings(): Promise<PaymentSettings> {
+  return apiFetch('/api/settings/payment');
+}
+
 // ── Orders ───────────────────────────────────────────
 
 export async function createOrder(data: {
