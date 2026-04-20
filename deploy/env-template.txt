@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────
+# File:    .env.local  (local dev)  /  cPanel Node.js App env vars (production)
+# Agent:   @DevOps_Specialist
+# NEVER commit this file — it is in .gitignore
+# ─────────────────────────────────────────────────────
+
+# Server
+NODE_ENV=production
+PORT=3000
+
+# Database — replace [cpanelusername] with your actual cPanel username
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=[cpanelusername]_jun3d_store
+DB_USER=[cpanelusername]_jun3d_app
+DB_PASS=REPLACE_WITH_STRONG_PASSWORD
+DB_STAGING_NAME=[cpanelusername]_jun3d_staging
+
+# Auth
+JWT_SECRET=REPLACE_WITH_64_CHAR_RANDOM_STRING
+JWT_EXPIRES_IN=8h
+ADMIN_EMAIL=admin@jun3d-studio.store
+
+# Store config
+STORE_NAME=Jun 3D Studio
+STORE_DOMAIN=https://jun3d-studio.store
+CURRENCY=VND
+
+# Next.js public vars (these are baked into the frontend build)
+NEXT_PUBLIC_API_URL=https://jun3d-studio.store
+NEXT_PUBLIC_STORE_NAME=Jun 3D Studio

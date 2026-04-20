@@ -1,0 +1,61 @@
+# ─────────────────────────────────────────────────────
+# File:    public_html/.htaccess
+#          (rename to .htaccess and upload to public_html/)
+# Agent:   @DevOps_Specialist
+# Domain:  jun3d-studio.store
+# ─────────────────────────────────────────────────────
+
+Options -Indexes
+RewriteEngine On
+
+# ── Force HTTPS ───────────────────────────────────────
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── www → non-www redirect ────────────────────────────
+RewriteCond %{HTTP_HOST} ^www\.jun3d-studio\.store [NC]
+RewriteRule ^ https://jun3d-studio.store%{REQUEST_URI} [L,R=301]
+
+# ── Static asset cache headers ────────────────────────
+<FilesMatch "\.(js|css|webp|png|jpg|jpeg|ico|svg|woff2|woff)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# ── Product images: 30-day cache ──────────────────────
+<FilesMatch "^images/.*\.(webp|jpg|jpeg|png)$">
+    Header set Cache-Control "public, max-age=2592000"
+</FilesMatch>
+
+# ── Block sensitive files ─────────────────────────────
+<FilesMatch "\.(env|sql|log|sh|yml|json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+<FilesMatch "^(package\.json|package-lock\.json|ecosystem\.config\.js)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+RewriteRule ^\.git - [F,L]
+RewriteRule ^server/ - [F,L]
+RewriteRule ^node_modules/ - [F,L]
+
+# ── SPA fallback for Next.js static export ───────────
+# Do not rewrite API calls (Passenger handles /api/*)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule ^(.*)$ /$1.html [L,QSA]
+
+# ── Gzip compression ─────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ── Security headers ──────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

@@ -1,0 +1,27 @@
+---
+# ─────────────────────────────────────────────────────
+# File:    .cpanel.yml  (must also exist at project ROOT — copy this there)
+# Agent:   @DevOps_Specialist
+# Purpose: cPanel Git deployment hook
+# Runs:    Automatically after every git push to the cPanel remote
+# Domain:  jun3d-studio.store
+# ─────────────────────────────────────────────────────
+deployment:
+  tasks:
+    # 1. Install production dependencies only
+    - export DEPLOYPATH=/home/$USER/3d-store
+    - /usr/local/bin/node /usr/bin/npm ci --omit=dev
+
+    # 2. Build Next.js static export → outputs to /out
+    - /usr/local/bin/node /usr/bin/npm run build
+
+    # 3. Sync static output to public_html (Apache serves these directly)
+    - cp -r $DEPLOYPATH/out/. $DEPLOYPATH/public_html/
+    - cp -r $DEPLOYPATH/public/images $DEPLOYPATH/public_html/images
+
+    # 4. Ensure .htaccess is in place (static copy may overwrite it)
+    - cp $DEPLOYPATH/public_html_static/.htaccess $DEPLOYPATH/public_html/.htaccess
+
+    # 5. Restart Passenger (Node.js app picks up new server/ files)
+    - mkdir -p $DEPLOYPATH/tmp
+    - touch $DEPLOYPATH/tmp/restart.txt
