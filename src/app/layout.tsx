@@ -5,6 +5,8 @@
 // Purpose: Root layout — wraps all pages with font, metadata, and providers.
 // ─────────────────────────────────────────────────────
 import type { Metadata } from 'next';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -50,9 +52,9 @@ export default function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-full">
-        {/* Navbar — Sprint 2 */}
+        <Navbar />
         <main className="flex-1">{children}</main>
-        {/* Footer — Sprint 2 */}
+        <Footer />
       </body>
     </html>
   );

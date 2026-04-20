@@ -53,7 +53,7 @@ app.get('/api/health', (req, res) => {
 
 // ── API Routes (uncommented sprint by sprint) ─────────
 // Sprint 2 — Products (public)
-// app.use('/api/products', require('./routes/products'));
+app.use('/api/products', require('./routes/products'));
 
 // Sprint 3 — Cart + Orders
 // app.use('/api/cart',   require('./routes/cart'));
