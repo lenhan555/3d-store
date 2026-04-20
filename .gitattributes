@@ -1,0 +1,3 @@
+# Ensure LF line endings on the Linux cPanel server
+* text=auto eol=lf
+*.bat text eol=crlf

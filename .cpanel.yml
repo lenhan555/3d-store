@@ -1,0 +1,22 @@
+---
+# ─────────────────────────────────────────────────────
+# File:    .cpanel.yml  (project root — cPanel reads this automatically)
+# Agent:   @DevOps_Specialist
+# Branch:  master
+# Domain:  jun3d-studio.store
+# Runs:    After every: git push cpanel master
+# ─────────────────────────────────────────────────────
+deployment:
+  tasks:
+    # 1. Install production dependencies (skip devDependencies)
+    - export DEPLOYPATH=/home/$USER/3d-store
+    - cd $DEPLOYPATH && /usr/local/bin/node /usr/bin/npm ci --omit=dev
+
+    # 2. Build Next.js (.next/ output used by custom server)
+    - cd $DEPLOYPATH && /usr/local/bin/node /usr/bin/npm run build
+
+    # 3. Ensure tmp/ directory exists (Passenger restart file lives here)
+    - mkdir -p $DEPLOYPATH/tmp
+
+    # 4. Restart the Node.js app — Passenger reloads on next request
+    - touch $DEPLOYPATH/tmp/restart.txt

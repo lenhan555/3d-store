@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Env files — NEVER commit these
+.env
+.env.local
+.env.production
+.env.staging
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploaded images (managed on server, not in git)
+public/images/products/*
+!public/images/products/.gitkeep
+
+# Planning & team files (not needed on cPanel server)
+.claude/
+agents/
+outputs/
+memory/
+workflows/
+templates/
+tools/
+deploy/
+CLAUDE.md
+PROGRESS.md
+AI_Agent_Prompt_3D_Store.md
+
+# PM2 (not used on cPanel, but keep out of repo)
+ecosystem.config.js
+
+# Misc
+tmp/
+*.bak
