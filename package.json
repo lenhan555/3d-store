@@ -6,7 +6,8 @@
     "dev": "node server/index.js",
     "build": "next build",
     "start": "NODE_ENV=production node server/index.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "next build"
   },
   "dependencies": {
     "next": "14.2.3",
