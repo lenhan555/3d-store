@@ -1,9 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/nhjunp4m/3d-store
-    - export NODEENV=/home/nhjunp4m/nodevenv/3d-store/20/bin/activate
-    - source $NODEENV && cd $DEPLOYPATH && npm ci --omit=dev
-    - source $NODEENV && cd $DEPLOYPATH && npm run build
-    - mkdir -p $DEPLOYPATH/tmp
-    - touch $DEPLOYPATH/tmp/restart.txt
+    - mkdir -p /home/nhjunp4m/3d-store/tmp
+    - touch /home/nhjunp4m/3d-store/tmp/restart.txt
