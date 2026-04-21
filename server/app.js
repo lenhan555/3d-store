@@ -60,10 +60,10 @@ app.use('/api/orders',   require('./routes/orders'));
 app.use('/api/settings', require('./routes/settings'));
 
 // Sprint 4 — Admin
-// app.use('/api/admin',  require('./routes/admin/auth'));
-// app.use('/api/admin/products', require('./routes/admin/products'));
-// app.use('/api/admin/orders',   require('./routes/admin/orders'));
-// app.use('/api/admin/upload',   require('./routes/admin/upload'));
+const { requireAuth } = require('./middleware/auth');
+app.use('/api/admin',           require('./routes/admin/auth'));
+app.use('/api/admin/products',  requireAuth, require('./routes/admin/products'));
+app.use('/api/admin/orders',    requireAuth, require('./routes/admin/orders'));
 
 // ── 404 for unknown API routes ────────────────────────
 app.use('/api/*', (req, res) => {

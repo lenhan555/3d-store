@@ -14,15 +14,79 @@
 | 3 | Code Generation Strategy | ✅ COMPLETE |
 | 4 | Deployment & Optimization Plan | ✅ COMPLETE |
 | 5 | Upgrade Protocol | ✅ COMPLETE |
-| — | Phase 1 Code: Product Catalog (API + UI) | ⬜ PENDING |
-| — | Phase 1 Code: Product Detail Page | ⬜ PENDING |
-| — | Phase 1 Code: Shopping Cart + Checkout | ⬜ PENDING |
-| — | Phase 1 Code: Admin Panel | ⬜ PENDING |
-| — | Deployment to cPanel | ⬜ PENDING (files ready, awaiting Sprint 1 code) |
+| — | Phase 1 Code: Sprint 1 — Foundation | ✅ COMPLETE |
+| — | Phase 1 Code: Sprint 2 — Product Catalog (API + UI) | ✅ COMPLETE |
+| — | Phase 1 Code: Sprint 3 — Cart + Checkout | ✅ COMPLETE |
+| — | Phase 1 Code: Sprint 4 — Admin Panel | ✅ COMPLETE |
+| — | Deployment to cPanel | ⬜ PENDING (push after Sprint 2) |
 
 ---
 
 ## Session Log
+
+### Session 4 — 2026-04-21
+
+**Completed:**
+
+#### Sprint 4 — Admin Panel ✅
+
+**Backend (completed prior session):**
+- `server/middleware/auth.js` — `requireAuth`: JWT Bearer verify, sets `req.admin`
+- `server/middleware/upload.js` — Multer memory storage, 5MB, JPEG/PNG/WebP only
+- `server/utils/imageProcessor.js` — Sharp 800×800 WebP q78, saves to `public/images/products/{slug}/`, `deleteFile()` helper
+- `server/routes/admin/auth.js` — POST /api/admin/login: bcrypt.compare, jwt.sign 7d, updates last_login_at
+- `server/routes/admin/products.js` — full CRUD + image upload/delete/set-primary
+- `server/routes/admin/orders.js` — list, detail, status update, dashboard stats
+- `server/app.js` — Sprint 4 admin routes enabled with `requireAuth`
+
+**Frontend (completed this session):**
+- `src/lib/adminApi.ts` — TOKEN_KEY, isTokenValid (JWT base64 decode), auto-redirect on 401, adminUploadImage via FormData
+- `src/app/admin/layout.tsx` — auth guard useEffect, dark sidebar nav (Orders + Products), logout
+- `src/app/admin/login/page.tsx` — dark stone-900 form, redirects if already valid token
+- `src/app/admin/orders/page.tsx` — stats bar, status filter chips, table with inline order/payment status dropdowns, expandable row for address/summary, pagination
+- `src/app/admin/products/page.tsx` — product table with thumbnail, toggle switch (active/inactive), edit link, pagination
+- `src/app/admin/products/[id]/page.tsx` — create/edit form (all fields), image gallery with upload/delete/set-primary; route works for both `/new` and `/:id`
+- `src/app/globals.css` — added `.input-field` utility class
+
+**Key decisions Sprint 4:**
+- `dashboard/stats` route registered after `/:id` — static segment `/dashboard/stats` evaluated before parameterized `/:id` in Express (critical ordering)
+- Image upload uses FormData with no `Content-Type` header — browser sets correct multipart boundary automatically
+- Admin JWT stored in `localStorage`; `isTokenValid()` decodes base64 payload client-side (no server round-trip)
+- Order expanded-detail row uses `key={id}-detail` to avoid React key collision with main row
+
+---
+
+### Session 3 — 2026-04-21
+
+**Completed:**
+
+#### Sprint 1 — Foundation ✅
+All foundation files generated. Ready to `npm install` and first push.
+
+**Files created:**
+- `package.json` — Next.js 14 + Express 4 + MySQL2 + Sharp + all deps
+- `next.config.js` — custom server mode (no static export); `images.unoptimized: true`
+- `tailwind.config.js` — brand palette (brand-500 = `#d9892a`), purged
+- `postcss.config.js`, `tsconfig.json`
+- `.gitignore` — excludes `.env*`, `node_modules/`, `.next/`, planning files
+- `.cpanel.yml` — deploy hook: `npm ci` → `next build` → `touch tmp/restart.txt`
+- `server/index.js` — Passenger entry point; boots Express + Next.js together
+- `server/app.js` — Express middleware, rate limiter, health endpoint, stubbed routes
+- `server/config/env.js` — validates required env vars at startup, exits if missing
+- `server/config/db.js` — MySQL2 connection pool (max 10), keepAlive, UTC timezone
+- `src/app/layout.tsx` — root layout with metadata for SEO
+- `src/app/page.tsx` — homepage placeholder (replaced Sprint 2)
+- `src/app/globals.css` — Tailwind base + `.btn-primary`, `.product-card`, `.form-input` utility classes
+- `db/migrations/20260421_001_initial_schema.sql` — 6 tables (VND pricing, MySQL 8)
+- `db/migrations/20260421_001_initial_schema_rollback.sql`
+- `public/images/products/.gitkeep`
+
+**Key decisions Sprint 1:**
+- Custom Express+Next.js server (not static export) — handles dynamic routes without build-time DB
+- `dotenv` loads `.env.local` — cPanel env vars override at runtime via Node.js App panel
+- Price stored as `DECIMAL(12,0)` — VND has no fractional units
+
+---
 
 ### Session 2 — 2026-04-21
 
@@ -147,4 +211,4 @@ All 5 Execution Directives from the brief are now complete. The project is ready
 
 ---
 
-*Last updated: 2026-04-20 | @Project_Manager*
+*Last updated: 2026-04-21 | @Project_Manager*
