@@ -68,12 +68,18 @@ export async function createOrder(data: {
     color?: string | null;
   }>;
 }) {
-  return apiFetch('/api/orders', {
+  return apiFetch<{
+    orderNumber: string;
+    bankDetails?: {
+      bank_name: string; account_number: string;
+      account_name: string; amount: number; reference: string;
+    };
+  }>('/api/orders', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function getOrderStatus(orderNumber: string) {
-  return apiFetch(`/api/orders/${orderNumber}`);
+  return apiFetch<{ order: unknown }>(`/api/orders/${orderNumber}`);
 }
