@@ -28,8 +28,10 @@ nextApp.prepare()
     // All non-API routes handled by Next.js
     app.all('*', (req, res) => handle(req, res));
 
-    const port = env.PORT;
-    app.listen(port, '127.0.0.1', () => {
+    // Passenger (cPanel) injects PORT as a socket path or port number.
+    // Do not bind to 127.0.0.1 — Passenger manages the listener address.
+    const port = process.env.PORT || env.PORT;
+    app.listen(port, () => {
       console.log(`[${new Date().toISOString()}] Jun 3D Studio ready`);
       console.log(`[server] ENV: ${env.NODE_ENV} | Port: ${port}`);
       console.log(`[server] DB:  ${env.DB_HOST}/${env.DB_NAME}`);
